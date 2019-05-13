@@ -1,0 +1,1 @@
+nohup python train.py --dataset_path="/opt/tfrecords/SatNet.v.1.0.0.0/unfiltered_single_frame/" --train_tfrecord="satnet_full_singleframes_v1_0_0_train.tfrecords" --valid_tfrecord="satnet_full_singleframes_v1_0_0_valid.tfrecords" --test_tfrecord="satnet_full_singleframes_v1_0_0_test.tfrecords" --train_log_dir="~/logs/dataset_gan_1" --gpu_list="0" &> satgan1.log &

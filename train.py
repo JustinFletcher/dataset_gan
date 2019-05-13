@@ -1,4 +1,4 @@
-# Copyright 2017 The TensorFlow Authors. All Rights Reserved.
+    # Copyright 2017 The TensorFlow Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -55,6 +55,10 @@ def main(FLAGS):
 
     if not tf.gfile.Exists(FLAGS.train_log_dir):
         tf.gfile.MakeDirs(FLAGS.train_log_dir)
+
+    # Set the GPUs we want the script to use/see
+    print("GPU List = " + str(flags.gpu_list))
+    os.environ["CUDA_VISIBLE_DEVICES"] = flags.gpu_list
 
     # Force all input processing onto CPU in order to reserve the GPU for
     # the forward inference and back-propagation.
@@ -214,6 +218,7 @@ if __name__ == '__main__':
                         default="desequenced_test_rn_16mc.tfrecords",
                         help='Name of the testing TFRecord file.')
 
+    # TODO: Enable timestapmed commandline log dirs. 
     tb_file = os.path.join("./tensorboard/",
                            '{}_{}/'.format("gan", time.strftime('%m%d%I%M')))
 
