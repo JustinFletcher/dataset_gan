@@ -50,14 +50,13 @@ def _learning_rate(gan_type):
 # Remove buggy error checks.
 def main(FLAGS):
 
-
     # Create the log directory, if it doesn't exist.
     if not tf.gfile.Exists(FLAGS.train_log_dir):
         tf.gfile.MakeDirs(FLAGS.train_log_dir)
 
     # Restrict GPU usage to avoid stepping on other work.
     print("GPU List = " + str(FLAGS.gpu_list))
-    os.environ["CUDA_VISIBLE_DEVICES"] = flags.gpu_list
+    os.environ["CUDA_VISIBLE_DEVICES"] = FLAGS.gpu_list
 
     # Force all input processing onto CPU in order to reserve the GPU for
     # the forward inference and back-propagation.
