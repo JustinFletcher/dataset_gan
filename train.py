@@ -56,7 +56,7 @@ def main(FLAGS):
         tf.gfile.MakeDirs(FLAGS.train_log_dir)
 
     # Restrict GPU usage to avoid stepping on other work.
-    print("GPU List = " + str(flags.gpu_list))
+    print("GPU List = " + str(FLAGS.gpu_list))
     os.environ["CUDA_VISIBLE_DEVICES"] = flags.gpu_list
 
     # Force all input processing onto CPU in order to reserve the GPU for
@@ -241,7 +241,7 @@ if __name__ == '__main__':
                         type=int,
                         default=1000000,
                         help='The maximum number of gradient steps.')
-    
+
     parser.add_argument('--gpu_list', type=str,
                         default="0",
                         help='GPUs to use with this model.')
