@@ -1,3 +1,4 @@
+
 # Copyright 2017 The TensorFlow Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -98,6 +99,8 @@ def _generator_helper(noise,
       net = layers.fully_connected(noise, 256)
       if is_conditional:
         net = tfgan.features.condition_tensor_from_onehot(net, one_hot_labels)
+
+
       net = layers.fully_connected(net, output_size * output_size * num_channels)
       net = tf.reshape(net, [-1, output_size, output_size, num_channels])
 
@@ -206,30 +209,32 @@ def _discriminator_helper_old(img, is_conditional, one_hot_labels, weight_decay)
 
 
 def _discriminator_helper(img, is_conditional, one_hot_labels, weight_decay):
-  """Core MNIST discriminator.
+    """Core MNIST discriminator.
 
-  This function is reused between the different GAN modes (unconditional,
-  conditional, etc).
+    This function is reused between the different GAN modes (unconditional,
+    conditional, etc).
 
-  Args:
-    img: Real or generated MNIST digits. Should be in the range [-1, 1].
-    is_conditional: Whether to condition on labels.
-    one_hot_labels: Labels to optionally condition the network on.
-    weight_decay: The L2 weight decay.
+    Args:
+      img: Real or generated MNIST digits. Should be in the range [-1, 1].
+      is_conditional: Whether to condition on labels.
+      one_hot_labels: Labels to optionally condition the network on.
+      weight_decay: The L2 weight decay.
 
-  Returns:
-    Final fully connected discriminator layer. [batch_size, 1024].
-  """
-  with tf.contrib.framework.arg_scope(
-      [layers.conv2d, layers.fully_connected],
-      activation_fn=_leaky_relu, normalizer_fn=None,
-      weights_regularizer=layers.l2_regularizer(weight_decay),
-      biases_regularizer=layers.l2_regularizer(weight_decay)):
-    net = layers.flatten(img)
-    net = layers.fully_connected(net, 256, normalizer_fn=layers.layer_norm)
+    Returns:
+      Final fully connected discriminator layer. [batch_size, 1024].
+    """
+    with tf.contrib.framework.arg_scope([layers.conv2d,
+                                         layers.fully_connected],
+                                        activation_fn=_leaky_relu,
+                                        normalizer_fn=None,
+                                        weights_regularizer=layers.l2_regularizer(weight_decay),
+                                        biases_regularizer=layers.l2_regularizer(weight_decay)):
+        net = layers.conv2d(img, 32, [4, 4], stride=2)
+        net = layers.conv2d(net, 64, [4, 4], stride=2)
+        net = layers.flatten(net)
+        net = layers.fully_connected(net, 32, normalizer_fn=layers.layer_norm)
 
-
-  return net
+    return net
 
 
 def unconditional_discriminator(img, unused_conditioning, weight_decay=2.5e-5):
